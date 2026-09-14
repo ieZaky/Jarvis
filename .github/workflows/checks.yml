@@ -1,0 +1,52 @@
+name: Jarvis checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  core:
+    name: Python / ${{ matrix.os }} / ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile Python
+        run: python -m compileall -q jarvis.py tests/test_jarvis.py
+      - name: Unit and HTTP integration tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+  browser:
+    name: Chromium UI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript
+        run: node --check web/app.js
+      - name: Install browser test dependency
+        run: npm install --no-save --package-lock=false playwright@1.55.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Exercise UI
+        run: node tests/browser.cjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-ui-screenshots
+          path: test-results/
+          if-no-files-found: ignore
