@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jarvis · Personal assistant</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+<a class="brand" href="/"><span class="brand-icon">J</span><span>JARVIS<small>PERSONAL ASSISTANT</small></span></a>
+<div class="section-label">WORKSPACE</div>
+<nav aria-label="Main navigation">
+<button class="nav active" data-tab="chat"><span>◈</span> Conversation</button>
+<button class="nav" data-tab="tasks"><span>☑</span> Tasks & reminders <b id="task-count">0</b></button>
+<button class="nav" data-tab="memories"><span>◇</span> Memory</button>
+<button class="nav" data-tab="activity"><span>↗</span> Activity <b id="action-count">0</b></button>
+<button class="nav" data-tab="settings"><span>⚙</span> Settings</button>
+</nav>
+<div class="sidebar-bottom"><span class="status-dot"></span><span id="connection">Connecting…</span><p>Runs on your computer.<br>Your workspace, your assistant.</p></div>
+</aside>
+<main>
+<header><div><span class="eyebrow">YOUR PERSONAL COMMAND CENTER</span><h1 id="page-title">Conversation</h1></div><div class="header-right"><span id="provider-badge" class="badge">LOCAL</span><time id="clock"></time></div></header>
+<div id="notice" class="notice" role="status" hidden></div>
+<section id="chat" class="panel active">
+<div id="welcome"><div class="orb"><span>J</span></div><span class="eyebrow">READY WHEN YOU ARE</span><h2>A little more possible.</h2><p>Think it through. Remember it. Get it done.</p>
+<div class="suggestions"><button data-prompt="/help">Explore what I can do <span>↗</span></button><button data-prompt="/task Review automation test cases">Plan my next task <span>↗</span></button><button data-prompt="/remind 10m Take a break">Remind me in 10 minutes <span>↗</span></button><button data-prompt="/files">Explore my files <span>↗</span></button></div></div>
+<div id="messages" aria-live="polite" aria-label="Conversation"></div>
+<div class="composer-wrap"><div class="voice-options"><label><input type="checkbox" id="speak"> Speak replies</label><label class="sr-only" for="language">Voice language</label><select id="language"><option value="en-US">English</option><option value="ar-EG">العربية</option></select><span id="thinking"></span></div>
+<form id="composer"><label for="prompt" class="sr-only">Message Jarvis</label><textarea id="prompt" rows="2" maxlength="8000" placeholder="Ask Jarvis anything, or type /help…" required dir="auto"></textarea><button type="button" id="mic" aria-label="Start voice input" title="Voice input">◉</button><button id="send" type="submit" aria-label="Send message">↑</button></form><p class="footnote">Enter to send · Shift+Enter for a new line · AI requires a provider in Settings</p></div>
+</section>
+<section id="tasks" class="panel"><div class="section-heading"><div><h2>Make room for what matters.</h2><p>Tasks and reminders stay saved between sessions.</p></div><button id="enable-notifications" class="secondary">Enable notifications</button></div><form id="task-form" class="inline-form"><label class="sr-only" for="task-title">Task title</label><input id="task-title" placeholder="What needs doing?" maxlength="500" required><label class="sr-only" for="task-due">Optional reminder time</label><input id="task-due" type="datetime-local"><button class="primary">Add task</button></form><p class="muted">Reminders appear while this interface is open. Overdue reminders appear when you return.</p><div id="task-list" class="cards"></div></section>
+<section id="memories" class="panel"><div class="section-heading"><div><h2>The details, remembered.</h2><p>Facts you explicitly ask Jarvis to remember.</p></div></div><form id="memory-form" class="inline-form"><label class="sr-only" for="memory-text">Memory</label><input id="memory-text" placeholder="Remember that I prefer concise answers…" maxlength="4000" required><button class="primary">Remember</button></form><div id="memory-list" class="cards"></div></section>
+<section id="activity" class="panel"><div class="section-heading"><div><h2>You make the call.</h2><p>Review app and website launches, then approve or decline.</p></div></div><div id="activity-list" class="cards"></div></section>
+<section id="settings" class="panel"><div class="section-heading"><div><h2>A mind that works for you.</h2><p>Choose a cloud model, a local model, or built-in commands.</p></div></div><form id="settings-form" class="settings-card">
+<label for="provider">AI provider</label><select id="provider"><option value="commands">Local commands · no AI setup</option><option value="openai">OpenAI · API key required</option><option value="ollama">Ollama · local model</option></select>
+<label for="model">Model name</label><input id="model" value="gpt-4.1-mini" maxlength="120" required><p class="muted">OpenAI: choose a chat model with tool support. Ollama: use the exact name of an installed model with tool support.</p>
+<label for="api-key">OpenAI API key</label><input id="api-key" type="password" autocomplete="off" placeholder="Key is kept in server memory only"><p id="key-state" class="muted"></p><label class="check"><input type="checkbox" id="clear-key"> Forget the current key</label>
+<button class="primary">Save settings</button><div id="settings-status" role="status"></div></form>
+<div class="settings-card"><h3>Your local workspace</h3><code id="workspace-path"></code><p>Jarvis can read and create UTF-8 text files here. Existing files are never overwritten.</p><h3>Connections & privacy</h3><p>With OpenAI, recent chat, saved memories, and requested file contents are sent to OpenAI. Ollama connects only to 127.0.0.1:11434. Browser speech recognition may use your browser vendor's servers.</p><p>Voice needs browser support and microphone permission. This version has no wake word, arbitrary PC control, email integration, or unattended browser jobs.</p></div>
+</section>
+</main>
+</body></html>
