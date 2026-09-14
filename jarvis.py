@@ -181,7 +181,7 @@ class Jarvis:
     def pending(self, operation, payload):
         ident = secrets.token_hex(12)
         with self.db() as db:
-            db.execute("INSERT INTO actions VALUES(?,?,?,?,?,?,?)",
+            db.execute("INSERT INTO actions(id,operation,payload,status,created,result) VALUES(?,?,?,?,?,?)",
                        (ident, operation, json.dumps(payload), "pending", dt.datetime.now().timestamp(), ""))
         return {"status": "pending", "id": ident, "message": "Review and approve this action in the Activity panel."}
 
