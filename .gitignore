@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+settings.json
+dist/
+build/
+*.spec
+playwright-report/
+test-results/
