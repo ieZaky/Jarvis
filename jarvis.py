@@ -1,6 +1,7 @@
 """Jarvis local assistant. Python 3.11+, standard library only."""
 from __future__ import annotations
 import ast
+from contextlib import contextmanager
 import datetime as dt
 import http.cookies
 import json
@@ -122,10 +123,15 @@ class Jarvis:
             """)
             db.execute("UPDATE actions SET status='failed', result='Interrupted; verify the app before retrying.' WHERE status='running'")
 
+    @contextmanager
     def db(self):
         conn = sqlite3.connect(self.home / "jarvis.db", timeout=15)
         conn.row_factory = sqlite3.Row
-        return conn
+        try:
+            with conn:
+                yield conn
+        finally:
+            conn.close()
 
     def rows(self, query, args=()):
         with self.db() as db:
